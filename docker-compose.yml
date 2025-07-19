@@ -1,13 +1,25 @@
 version: '3.8'
 
 services:
-  backend:
-    build: ./backend
+  orchestrator:
+    build: ./src/orchestrator
     ports:
       - "5000:5000"
+    volumes:
+      - ./src/orchestrator:/app/src/orchestrator
   frontend:
-    build: ./frontend
+    build: ./src/services/frontend
     ports:
       - "80:80"
     depends_on:
-      - backend
+      - orchestrator
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: orchestrator
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
