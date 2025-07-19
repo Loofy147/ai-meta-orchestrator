@@ -18,12 +18,19 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r src/orchestrator/requirements.txt
+        pip install -r src/orchestrator/requirements-dev.txt
     - name: Code quality check
       run: |
         pip install black flake8 isort
         black --check src/
         flake8 src/
         isort --check src/
+    - name: Run backend tests
+      run: |
+        pytest src/orchestrator/
+    - name: Run frontend tests
+      run: |
+        npm test
 
   build-and-deploy:
     needs: test
