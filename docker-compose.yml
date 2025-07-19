@@ -5,9 +5,19 @@ services:
     build: ./backend
     ports:
       - "5000:5000"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    depends_on:
+      - mlflow
   frontend:
     build: ./frontend
     ports:
       - "80:80"
     depends_on:
       - backend
+  mlflow:
+    image: "mlflow/mlflow:latest"
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./mlruns:/mlruns
