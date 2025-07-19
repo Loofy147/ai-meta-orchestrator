@@ -7,7 +7,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-# Train the model, run drift detection, and retrain the model
-RUN python model.py && python drift_detection.py && python retrain.py
-
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "server:app"]
+# This is a simplified setup. In a real-world scenario, you would have
+# a more sophisticated way to manage the ML lifecycle.
+CMD python train.py && python detect_drift.py && python retrain.py && gunicorn -b 0.0.0.0:5000 server:app

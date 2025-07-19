@@ -1,23 +1,26 @@
 version: '3.8'
 
 services:
+  mlflow:
+    image: mlflow/mlflow:v1.22.0
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlruns
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri /mlruns
+
   backend:
     build: ./backend
     ports:
-      - "5000:5000"
+      - "5001:5000"
     environment:
       - MLFLOW_TRACKING_URI=http://mlflow:5000
     depends_on:
       - mlflow
+
   frontend:
     build: ./frontend
     ports:
       - "80:80"
     depends_on:
       - backend
-  mlflow:
-    image: "mlflow/mlflow:latest"
-    ports:
-      - "5001:5000"
-    volumes:
-      - ./mlruns:/mlruns
